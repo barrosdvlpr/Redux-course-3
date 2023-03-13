@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { getProducts, Product } from "../../app/api";
-import { useAppSelector } from "../../app/hooks"
+import React, { useEffect } from "react";
+import { getProducts } from "../../app/api";
+import { receiveProducts } from "./productsSlice"
+import { useAppSelector, useAppDispatch } from "../../app/hooks"
 import styles from "./Products.module.css";
 
 export function Products() {
-  // const [products, setProducts] = useState<Product[]>([]);
-  // useEffect(() => {
-  //   getProducts().then((products) => {
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    getProducts().then((products) => {
   //     setProducts(products);
-  //   });
-  // }, []);
+      dispatch(receiveProducts(products))
+    });
+  }, []);
 
   const products = useAppSelector((state) => state.products.products)
 
