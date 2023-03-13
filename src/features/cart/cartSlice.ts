@@ -22,11 +22,14 @@ const cartSlice = createSlice({
             } else {
                 state.items[id] = 1
             }
+        },
+        removeFromCart(state, action: PayloadAction<string>){
+            delete state.items[action.payload]
         }
     }
 })
 
-export const { addToCart } = cartSlice.actions;
+export const { addToCart, removeFromCart } = cartSlice.actions;
 export default cartSlice.reducer;
 
 export function getNumItems(state: RootState){
@@ -54,21 +57,9 @@ export const getMemoizedNumItems = createSelector(
     }
 ) 
 
-export const getTotalPrice = createSelector <RootState, any, any, string>(
-    (state) => state.cart.items,
-    (state) => state.products.products,
-    (items, products) => {
-        let total = 0;
-        for (let id in items){
-            total += products[id].price * items[id]
-        }
-        return total.toFixed(2)
-    }
-)
-
-// export const getTotalPrice = createSelector(
-//     (state: RootState) => state.cart.items,
-//     (state: RootState) => state.products.products,
+// export const getTotalPrice = createSelector <RootState, any, any, string>(
+//     (state) => state.cart.items,
+//     (state) => state.products.products,
 //     (items, products) => {
 //         let total = 0;
 //         for (let id in items){
@@ -77,3 +68,15 @@ export const getTotalPrice = createSelector <RootState, any, any, string>(
 //         return total.toFixed(2)
 //     }
 // )
+
+export const getTotalPrice = createSelector(
+    (state: RootState) => state.cart.items,
+    (state: RootState) => state.products.products,
+    (items, products) => {
+        let total = 0;
+        for (let id in items){
+            total += products[id].price * items[id]
+        }
+        return total.toFixed(2)
+    }
+)
